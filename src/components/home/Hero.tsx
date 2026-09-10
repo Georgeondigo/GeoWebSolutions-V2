@@ -10,8 +10,7 @@ export default function Hero() {
             <p className="mb-6 text-sm font-semibold uppercase tracking-[0.2em] text-geoweb-red">
               GeoWeb Solutions
             </p>
-
-            <h1 className="max-w-4xl text-5xl font-semibold leading-[1.05] tracking-[-0.03em] text-geoweb-text sm:text-6xl lg:text-7xl xl:text-8xl">
+            <h1 className="font-display max-w-4xl text-5xl font-semibold leading-[1.05] tracking-[-0.03em] text-geoweb-text sm:text-6xl lg:text-7xl xl:text-8xl">
               Build a stronger digital presence.
             </h1>
 

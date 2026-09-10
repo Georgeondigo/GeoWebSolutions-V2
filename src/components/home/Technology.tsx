@@ -11,7 +11,7 @@ export default function Technology() {
               Technology
             </p>
 
-            <h2 className="mt-5 max-w-md text-4xl font-semibold leading-tight tracking-[-0.02em] sm:text-5xl">
+            <h2 className="font-display mt-5 max-w-md text-4xl font-semibold leading-tight tracking-[-0.02em] sm:text-5xl">
               Modern technology. Practical engineering.
             </h2>
 
@@ -27,7 +27,7 @@ export default function Technology() {
                 key={group.title}
                 className="grid gap-6 border-b border-white/10 py-8 sm:grid-cols-[180px_1fr] sm:py-10"
               >
-                <h3 className="text-xl font-semibold tracking-tight">
+                <h3 className="font-display text-xl font-semibold tracking-tight">
                   {group.title}
                 </h3>
 

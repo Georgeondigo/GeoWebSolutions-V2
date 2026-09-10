@@ -11,7 +11,7 @@ export default function FinalCTA() {
               Let&apos;s build
             </p>
 
-            <h2 className="mt-5 text-4xl font-semibold leading-tight tracking-[-0.03em] text-white sm:text-5xl lg:text-6xl">
+            <h2 className="font-display mt-5 text-4xl font-semibold leading-tight tracking-[-0.03em] text-white sm:text-5xl lg:text-6xl">
               Have a problem that needs a digital solution?
             </h2>
 

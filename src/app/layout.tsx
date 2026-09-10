@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import localFont from "next/font/local";
 import { Inter } from "next/font/google";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -7,6 +8,14 @@ import "./globals.css";
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
+});
+
+const agrandir = localFont({
+  src: "../fonts/Agrandir/Agrandir-rEGULAR.otf",
+  variable: "--font-agrandir",
+  weight: "400",
+  style: "normal",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -24,7 +33,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={`${inter.variable} ${agrandir.variable}`}>
       <body>
         <Header />
 

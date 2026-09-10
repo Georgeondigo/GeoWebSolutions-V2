@@ -36,7 +36,7 @@ export default function WhyGeoWeb() {
             Why GeoWeb
           </p>
 
-          <h2 className="mt-5 text-4xl font-semibold leading-tight tracking-[-0.02em] text-geoweb-text sm:text-5xl lg:text-6xl">
+          <h2 className="font-display mt-5 text-4xl font-semibold leading-tight tracking-[-0.02em] text-geoweb-text sm:text-5xl lg:text-6xl">
             Technology is only useful when it solves the right problem.
           </h2>
 
@@ -57,7 +57,7 @@ export default function WhyGeoWeb() {
                 {reason.number}
               </span>
 
-              <h3 className="mt-5 text-2xl font-semibold tracking-tight text-geoweb-text">
+              <h3 className="font-display mt-5 text-2xl font-semibold tracking-tight text-geoweb-text">
                 {reason.title}
               </h3>
 

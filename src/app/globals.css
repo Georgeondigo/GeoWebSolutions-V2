@@ -20,6 +20,7 @@
   --color-geoweb-text: var(--geoweb-text);
 
   --font-sans: var(--font-inter);
+  --font-display: var(--font-agrandir);
 }
 
 * {

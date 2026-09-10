@@ -14,7 +14,7 @@ export default function SelectedWork() {
               Selected work
             </p>
 
-            <h2 className="mt-5 text-4xl font-semibold leading-tight tracking-[-0.02em] text-geoweb-text sm:text-5xl">
+            <h2 className="font-display mt-5 text-4xl font-semibold leading-tight tracking-[-0.02em] text-geoweb-text sm:text-5xl">
               Work built around real needs.
             </h2>
 
@@ -47,7 +47,7 @@ export default function SelectedWork() {
                         {project.category}
                       </span>
 
-                      <h3 className="mt-3 text-3xl font-semibold tracking-tight text-white transition-transform duration-300 group-hover:translate-x-1">
+                      <h3 className="font-display text-3xl font-semibold tracking-tight text-white transition-transform duration-300 group-hover:translate-x-1">
                         {project.title}
                       </h3>
                     </div>
@@ -60,7 +60,7 @@ export default function SelectedWork() {
 
                 <div className="mt-5">
                   <div className="flex items-center justify-between gap-4">
-                    <h3 className="text-xl font-semibold text-geoweb-text">
+                    <h3 className="font-display text-xl font-semibold text-geoweb-text">
                       {project.title}
                     </h3>
 

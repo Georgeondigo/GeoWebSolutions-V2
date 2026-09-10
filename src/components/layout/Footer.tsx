@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import Container from "@/components/ui/Container";
 
@@ -15,8 +16,14 @@ export default function Footer() {
       <Container>
         <div className="grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-3">
           <div>
-            <Link href="/" className="text-2xl font-semibold">
-              GeoWeb
+            <Link href="/" className="inline-block">
+              <Image
+                src="/images/brand/geoweb-logo-light.png"
+                alt="GeoWeb Solutions"
+                width={220}
+                height={100}
+                className="h-12 w-auto"
+              />
             </Link>
 
             <p className="mt-4 max-w-sm text-sm leading-6 text-white/70">

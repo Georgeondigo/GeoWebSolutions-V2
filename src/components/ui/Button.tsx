@@ -5,6 +5,7 @@ interface ButtonProps {
   variant?: "primary" | "secondary";
   href?: string;
   className?: string;
+  onClick?: () => void;
 }
 
 export default function Button({
@@ -12,13 +13,13 @@ export default function Button({
   variant = "primary",
   href,
   className = "",
+  onClick,
 }: ButtonProps) {
   const baseStyles =
     "inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold transition-colors duration-200";
 
   const variants = {
-    primary:
-      "bg-geoweb-red text-white hover:bg-geoweb-indigo",
+    primary: "bg-geoweb-red text-white hover:bg-geoweb-indigo",
     secondary:
       "border border-geoweb-indigo text-geoweb-indigo hover:bg-geoweb-indigo hover:text-white",
   };
@@ -27,14 +28,14 @@ export default function Button({
 
   if (href) {
     return (
-      <a href={href} className={classes}>
+      <a href={href} className={classes} onClick={onClick}>
         {children}
       </a>
     );
   }
 
   return (
-    <button type="button" className={classes}>
+    <button type="button" className={classes} onClick={onClick}>
       {children}
     </button>
   );

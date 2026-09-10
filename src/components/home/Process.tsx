@@ -11,7 +11,7 @@ export default function Process() {
               Our process
             </p>
 
-            <h2 className="mt-5 max-w-md text-4xl font-semibold leading-tight tracking-[-0.02em] text-geoweb-text sm:text-5xl">
+            <h2 className="font-display mt-5 max-w-md text-4xl font-semibold leading-tight tracking-[-0.02em] text-geoweb-text sm:text-5xl">
               From business problem to digital solution.
             </h2>
 
@@ -33,7 +33,7 @@ export default function Process() {
                   </span>
 
                   <div>
-                    <h3 className="text-2xl font-semibold tracking-tight text-geoweb-text">
+                    <h3 className="font-display text-2xl font-semibold tracking-tight text-geoweb-text">
                       {step.title}
                     </h3>
 

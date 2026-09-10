@@ -1,6 +1,8 @@
+import Image from "next/image";
 import Link from "next/link";
 import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";
+import MobileMenu from "@/components/layout/MobileMenu";
 
 const navigation = [
   { label: "Home", href: "/" },
@@ -16,11 +18,15 @@ export default function Header() {
     <header className="border-b border-geoweb-indigo/10 bg-white">
       <Container>
         <div className="flex h-20 items-center justify-between">
-          <Link
-            href="/"
-            className="text-xl font-semibold tracking-tight text-geoweb-indigo"
-          >
-            GeoWeb
+          <Link href="/" className="shrink-0">
+            <Image
+              src="/images/brand/geoweb-logo.png"
+              alt="GeoWeb Solutions"
+              width={220}
+              height={100}
+              priority
+              className="h-12 w-auto"
+            />
           </Link>
 
           <nav className="hidden items-center gap-8 md:flex">
@@ -35,8 +41,12 @@ export default function Header() {
             ))}
           </nav>
 
-          <div className="hidden md:block">
-            <Button href="/contact">Start a project</Button>
+          <div className="flex items-center gap-3">
+            <div className="hidden md:block">
+              <Button href="/contact">Start a project</Button>
+            </div>
+
+            <MobileMenu />
           </div>
         </div>
       </Container>
