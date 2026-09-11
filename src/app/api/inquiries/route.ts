@@ -1,3 +1,4 @@
+import { prisma } from "@/lib/prisma";
 import { inquirySchema } from "@/lib/validation";
 
 export async function POST(request: Request) {
@@ -21,12 +22,15 @@ export async function POST(request: Request) {
 
     const inquiry = result.data;
 
-    console.log("Validated inquiry:", inquiry);
+    const createdInquiry = await prisma.inquiry.create({
+      data: inquiry,
+    });
 
     return Response.json(
       {
         success: true,
         message: "Inquiry received successfully.",
+        inquiryId: createdInquiry.id,
       },
       {
         status: 201,
