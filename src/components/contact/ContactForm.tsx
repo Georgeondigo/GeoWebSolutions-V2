@@ -22,10 +22,54 @@ const budgets = [
 
 export default function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setSubmitted(true);
+
+    setIsSubmitting(true);
+    setError("");
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+
+    const data = {
+      name: formData.get("name"),
+      business: formData.get("business") || undefined,
+      email: formData.get("email"),
+      projectType: formData.get("projectType"),
+      budget: formData.get("budget") || undefined,
+      timeline: formData.get("timeline") || undefined,
+      message: formData.get("message"),
+    };
+
+    try {
+      const response = await fetch("/api/inquiries", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || "Something went wrong.");
+      }
+
+      setSubmitted(true);
+      form.reset();
+    } catch (error) {
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Something went wrong. Please try again.",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   if (submitted) {
@@ -40,13 +84,16 @@ export default function ContactForm() {
         </h2>
 
         <p className="mt-5 max-w-xl text-base leading-7 text-geoweb-text/65">
-          We&apos;ve received your project information. We&apos;ll review it and get
-          back to you with the next steps.
+          We&apos;ve received your project information. We&apos;ll review it and
+          get back to you with the next steps.
         </p>
 
         <button
           type="button"
-          onClick={() => setSubmitted(false)}
+          onClick={() => {
+            setSubmitted(false);
+            setError("");
+          }}
           className="mt-8 text-sm font-semibold text-geoweb-red transition-colors hover:text-geoweb-indigo"
         >
           Send another inquiry →
@@ -218,6 +265,14 @@ export default function ContactForm() {
           className="mt-2 w-full resize-none rounded-xl border border-geoweb-indigo/10 bg-white px-4 py-3 text-sm leading-7 text-geoweb-text outline-none transition-colors placeholder:text-geoweb-text/35 focus:border-geoweb-red"
         />
       </div>
+      {error && (
+        <p
+          role="alert"
+          className="mt-6 rounded-xl border border-geoweb-red/20 bg-geoweb-red/5 px-4 py-3 text-sm text-geoweb-red"
+        >
+          {error}
+        </p>
+      )}
 
       {/* Submit */}
       <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -228,9 +283,10 @@ export default function ContactForm() {
 
         <button
           type="submit"
-          className="inline-flex shrink-0 items-center justify-center rounded-full bg-geoweb-red px-6 py-3 text-sm font-semibold text-white transition-colors duration-200 hover:bg-geoweb-indigo"
+          disabled={isSubmitting}
+          className="inline-flex shrink-0 items-center justify-center rounded-full bg-geoweb-red px-6 py-3 text-sm font-semibold text-white transition-colors duration-200 hover:bg-geoweb-indigo disabled:cursor-not-allowed disabled:opacity-60"
         >
-          Send inquiry →
+          {isSubmitting ? "Sending..." : "Send inquiry →"}
         </button>
       </div>
     </form>
