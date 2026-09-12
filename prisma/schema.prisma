@@ -7,8 +7,19 @@ datasource db {
   provider = "postgresql"
 }
 
+enum InquiryStatus {
+  NEW
+  REVIEWED
+  CONTACTED
+  QUALIFIED
+  PROPOSAL
+  WON
+  LOST
+  ARCHIVED
+}
+
 model Inquiry {
-  id          String   @id @default(cuid())
+  id          String        @id @default(cuid())
   name        String
   business    String?
   email       String
@@ -16,7 +27,7 @@ model Inquiry {
   budget      String?
   timeline    String?
   message     String
-  status      String   @default("NEW")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  status      InquiryStatus @default(NEW)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
 }
