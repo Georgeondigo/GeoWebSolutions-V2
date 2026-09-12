@@ -3,21 +3,21 @@
 import { FormEvent, useState } from "react";
 
 const projectTypes = [
-  "Business website",
-  "Web application",
-  "Business system",
-  "E-commerce",
-  "Website redesign",
-  "Digital growth",
-  "Not sure yet",
+  { value: "business-website", label: "Business website" },
+  { value: "web-application", label: "Web application" },
+  { value: "business-system", label: "Business system" },
+  { value: "e-commerce", label: "E-commerce" },
+  { value: "website-redesign", label: "Website redesign" },
+  { value: "digital-growth", label: "Digital growth" },
+  { value: "not-sure", label: "Not sure yet" },
 ];
 
 const budgets = [
-  "Under KES 50,000",
-  "KES 50,000 – 100,000",
-  "KES 100,000 – 250,000",
-  "KES 250,000+",
-  "Not sure yet",
+  { value: "under-50k", label: "Under KES 50,000" },
+  { value: "50k-100k", label: "KES 50,000 – 100,000" },
+  { value: "100k-250k", label: "KES 100,000 – 250,000" },
+  { value: "250k-plus", label: "KES 250,000+" },
+  { value: "not-sure", label: "Not sure yet" },
 ];
 
 export default function ContactForm() {
@@ -185,8 +185,8 @@ export default function ContactForm() {
             </option>
 
             {projectTypes.map((type) => (
-              <option key={type} value={type}>
-                {type}
+              <option key={type.value} value={type.value}>
+                {type.label}
               </option>
             ))}
           </select>
@@ -212,8 +212,8 @@ export default function ContactForm() {
             </option>
 
             {budgets.map((budget) => (
-              <option key={budget} value={budget}>
-                {budget}
+              <option key={budget.value} value={budget.value}>
+                {budget.label}
               </option>
             ))}
           </select>

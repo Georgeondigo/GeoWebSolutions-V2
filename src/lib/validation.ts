@@ -20,35 +20,22 @@ export const inquirySchema = z.object({
     .max(254, "Email address is too long"),
 
   projectType: z.enum([
-    "Business website",
-    "Web application",
-    "Business system",
-    "E-commerce",
-    "Website redesign",
-    "Digital growth",
-    "Not sure yet",
+    "business-website",
+    "web-application",
+    "business-system",
+    "e-commerce",
+    "website-redesign",
+    "digital-growth",
+    "not-sure",
   ]),
 
   budget: z
-    .enum([
-      "Under KES 50,000",
-      "KES 50,000 – 100,000",
-      "KES 100,000 – 250,000",
-      "KES 250,000+",
-      "Not sure yet",
-    ])
+    .enum(["under-50k", "50k-100k", "100k-250k", "250k-plus", "not-sure"])
     .optional(),
 
   timeline: z
-    .enum([
-      "asap",
-      "1-month",
-      "1-3-months",
-      "3-plus-months",
-      "flexible",
-    ])
+    .enum(["asap", "1-month", "1-3-months", "3-plus-months", "flexible"])
     .optional(),
-
   message: z
     .string()
     .trim()

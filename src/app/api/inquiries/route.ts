@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { sendInquiryNotification } from "@/lib/email";
 import { inquirySchema } from "@/lib/validation";
 
 export async function POST(request: Request) {
@@ -33,6 +34,12 @@ export async function POST(request: Request) {
     const inquiry = await prisma.inquiry.create({
       data: result.data,
     });
+
+    try {
+      await sendInquiryNotification(inquiry);
+    } catch (error) {
+      console.error("Failed to send inquiry notification:", error);
+    }
 
     return Response.json(
       {
