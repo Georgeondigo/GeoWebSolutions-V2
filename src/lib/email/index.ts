@@ -18,11 +18,17 @@ export async function sendInquiryNotification(inquiry: Inquiry) {
 
   const email = buildInquiryEmail(inquiry);
 
-  return resend.emails.send({
+  const result = await resend.emails.send({
     from: fromEmail,
     to: notificationEmail,
     subject: email.subject,
     html: email.html,
     replyTo: inquiry.email,
   });
+
+  if (result.error) {
+    throw new Error("Inquiry notification delivery failed.");
+  }
+
+  return result;
 }

@@ -45,13 +45,44 @@ export async function POST(request: Request) {
     delete inquiryData.website;
 
     const inquiry = await prisma.inquiry.create({
-      data: inquiryData,
+      data: {
+        ...inquiryData,
+        notificationStatus: "PENDING",
+      },
     });
 
     try {
       await sendInquiryNotification(inquiry);
+
+      await prisma.inquiry.update({
+        where: {
+          id: inquiry.id,
+        },
+        data: {
+          notificationStatus: "SENT",
+          notificationSentAt: new Date(),
+          notificationError: null,
+        },
+      });
     } catch (error) {
       console.error("Failed to send inquiry notification:", error);
+
+      try {
+        await prisma.inquiry.update({
+          where: {
+            id: inquiry.id,
+          },
+          data: {
+            notificationStatus: "FAILED",
+            notificationError: "Notification delivery failed.",
+          },
+        });
+      } catch (updateError) {
+        console.error(
+          "Failed to update inquiry notification status:",
+          updateError,
+        );
+      }
     }
 
     return Response.json(
