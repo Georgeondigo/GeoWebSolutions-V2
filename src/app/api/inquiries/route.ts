@@ -2,49 +2,55 @@ import { prisma } from "@/lib/prisma";
 import { inquirySchema } from "@/lib/validation";
 
 export async function POST(request: Request) {
+  let body: unknown;
+
   try {
-    const body = await request.json();
+    body = await request.json();
+  } catch {
+    return Response.json(
+      {
+        success: false,
+        message: "Invalid JSON request body.",
+      },
+      { status: 400 },
+    );
+  }
 
-    const result = inquirySchema.safeParse(body);
+  const result = inquirySchema.safeParse(body);
 
-    if (!result.success) {
-      return Response.json(
-        {
-          success: false,
-          message: "Invalid inquiry data.",
-          errors: result.error.flatten().fieldErrors,
-        },
-        {
-          status: 400,
-        },
-      );
-    }
+  if (!result.success) {
+    return Response.json(
+      {
+        success: false,
+        message: "Invalid inquiry data.",
+        errors: result.error.flatten().fieldErrors,
+      },
+      { status: 400 },
+    );
+  }
 
-    const inquiry = result.data;
-
-    const createdInquiry = await prisma.inquiry.create({
-      data: inquiry,
+  try {
+    const inquiry = await prisma.inquiry.create({
+      data: result.data,
     });
 
     return Response.json(
       {
         success: true,
         message: "Inquiry received successfully.",
-        inquiryId: createdInquiry.id,
+        inquiryId: inquiry.id,
       },
-      {
-        status: 201,
-      },
+      { status: 201 },
     );
-  } catch {
+  } catch (error) {
+    console.error("Failed to create inquiry:", error);
+
     return Response.json(
       {
         success: false,
-        message: "Invalid request.",
+        message: "Unable to process inquiry right now.",
       },
-      {
-        status: 400,
-      },
+      { status: 500 },
     );
   }
 }
