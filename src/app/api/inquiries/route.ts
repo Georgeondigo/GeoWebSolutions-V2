@@ -31,8 +31,21 @@ export async function POST(request: Request) {
   }
 
   try {
+    if (result.data.website) {
+      return Response.json(
+        {
+          success: false,
+          message: "Unable to process inquiry.",
+        },
+        { status: 400 },
+      );
+    }
+
+    const inquiryData = { ...result.data };
+    delete inquiryData.website;
+
     const inquiry = await prisma.inquiry.create({
-      data: result.data,
+      data: inquiryData,
     });
 
     try {
@@ -52,6 +65,15 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Failed to create inquiry:", error);
 
+    if (result.data.website) {
+      return Response.json(
+        {
+          success: false,
+          message: "Unable to process inquiry.",
+        },
+        { status: 400 },
+      );
+    }
     return Response.json(
       {
         success: false,

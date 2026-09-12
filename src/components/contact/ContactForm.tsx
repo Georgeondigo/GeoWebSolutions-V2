@@ -30,9 +30,9 @@ export default function ContactForm() {
 
     setIsSubmitting(true);
     setError("");
-
     const form = event.currentTarget;
     const formData = new FormData(form);
+    const website = formData.get("website");
 
     const data = {
       name: formData.get("name"),
@@ -42,6 +42,7 @@ export default function ContactForm() {
       budget: formData.get("budget") || undefined,
       timeline: formData.get("timeline") || undefined,
       message: formData.get("message"),
+      website,
     };
 
     try {
@@ -107,6 +108,19 @@ export default function ContactForm() {
       onSubmit={handleSubmit}
       className="rounded-2xl border border-geoweb-indigo/10 bg-white p-6 sm:p-8 lg:p-10"
     >
+      <div
+        aria-hidden="true"
+        className="absolute -left-[9999px] h-0 w-0 overflow-hidden"
+      >
+        <label htmlFor="website">Website</label>
+        <input
+          id="website"
+          name="website"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </div>
       <div className="grid gap-6 sm:grid-cols-2">
         {/* Name */}
         <div>

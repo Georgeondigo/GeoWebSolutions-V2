@@ -19,6 +19,8 @@ export const inquirySchema = z.object({
     .email("Please provide a valid email address")
     .max(254, "Email address is too long"),
 
+  website: z.string().max(200).optional(),
+
   projectType: z.enum([
     "business-website",
     "web-application",
