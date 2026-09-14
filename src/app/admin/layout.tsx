@@ -1,3 +1,4 @@
+import Link from "next/dist/client/link";
 import type { ReactNode } from "react";
 
 interface AdminLayoutProps {
@@ -13,25 +14,23 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             <p className="font-display text-lg text-geoweb-indigo">
               GeoWeb Admin
             </p>
-            <p className="text-xs text-geoweb-text/50">
-              Internal operations
-            </p>
+            <p className="text-xs text-geoweb-text/50">Internal operations</p>
           </div>
 
           <nav className="flex items-center gap-6 text-sm font-medium text-geoweb-text">
-            <a
+            <Link
               href="/admin"
               className="transition-colors hover:text-geoweb-red"
             >
               Dashboard
-            </a>
+            </Link>
 
-            <a
+            <Link
               href="/admin/inquiries"
               className="transition-colors hover:text-geoweb-red"
             >
               Inquiries
-            </a>
+            </Link>
           </nav>
         </div>
       </header>

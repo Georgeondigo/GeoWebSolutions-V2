@@ -4,6 +4,7 @@ import StatusControls from "./StatusControls";
 
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import Link from "next/link";
 
 const projectTypeLabels: Record<string, string> = {
   "business-website": "Business website",
@@ -110,12 +111,12 @@ export default async function InquiryDetailPage({
     <main className="px-6 py-10 lg:px-8">
       <div className="mx-auto max-w-5xl">
         <div className="mb-8">
-          <a
+          <Link
             href="/admin/inquiries"
             className="text-sm font-medium text-geoweb-text/60 transition-colors hover:text-geoweb-red"
           >
             ← Back to inquiries
-          </a>
+          </Link>
         </div>
 
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">

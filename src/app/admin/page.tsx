@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
@@ -28,8 +29,7 @@ export default async function AdminPage() {
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          <a
-            href="/admin/inquiries"
+          <Link href="/admin/inquiries"
             className="rounded-3xl bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
           >
             <p className="text-sm font-semibold text-geoweb-red">
@@ -44,7 +44,7 @@ export default async function AdminPage() {
               Review and manage project inquiries submitted through the
               GeoWeb website.
             </p>
-          </a>
+          </Link>
 
           <div className="rounded-3xl bg-white p-6 shadow-sm">
             <p className="text-sm font-semibold text-geoweb-red">
