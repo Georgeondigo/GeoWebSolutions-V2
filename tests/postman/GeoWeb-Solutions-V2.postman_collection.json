@@ -1,0 +1,177 @@
+{
+  "info": {
+    "_postman_id": "7f1d4b7e-8e89-4e3c-9b8e-0e5e4b7e2026",
+    "name": "GeoWeb Solutions V2",
+    "description": "Postman collection for testing GeoWeb Solutions V2 public inquiry and authenticated admin inquiry APIs.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "adminEmail",
+      "value": "geowebsolutionske@gmail.com"
+    },
+    {
+      "key": "adminPassword",
+      "value": ""
+    },
+    {
+      "key": "inquiryId",
+      "value": ""
+    },
+    {
+      "key": "csrfToken",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Get CSRF Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "pm.collectionVariables.set('csrfToken', data.csrfToken);",
+                  "pm.test('CSRF token received', function () {",
+                  "    pm.expect(data.csrfToken).to.be.a('string').and.not.empty;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/auth/csrf"
+          }
+        },
+        {
+          "name": "Admin Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "csrfToken",
+                  "value": "{{csrfToken}}",
+                  "type": "text"
+                },
+                {
+                  "key": "email",
+                  "value": "{{adminEmail}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "{{adminPassword}}",
+                  "type": "text"
+                },
+                {
+                  "key": "callbackUrl",
+                  "value": "{{baseUrl}}/admin",
+                  "type": "text"
+                },
+                {
+                  "key": "json",
+                  "value": "true",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": "{{baseUrl}}/api/auth/callback/credentials"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Public Inquiry API",
+      "item": [
+        {
+          "name": "Create Inquiry",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Postman Test\",\n  \"business\": \"GeoWeb Test Business\",\n  \"email\": \"postman@example.com\",\n  \"projectType\": \"business-website\",\n  \"budget\": \"50k-100k\",\n  \"timeline\": \"1-month\",\n  \"message\": \"Testing the GeoWeb inquiry API from Postman.\",\n  \"website\": \"\"\n}"
+            },
+            "url": "{{baseUrl}}/api/inquiries"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin Inquiry API",
+      "item": [
+        {
+          "name": "List Inquiries",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/admin/inquiries"
+          }
+        },
+        {
+          "name": "Get Inquiry By ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/admin/inquiries/{{inquiryId}}"
+          }
+        },
+        {
+          "name": "Update Inquiry Status - Valid",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"REVIEWED\"\n}"
+            },
+            "url": "{{baseUrl}}/api/admin/inquiries/{{inquiryId}}"
+          }
+        },
+        {
+          "name": "Update Inquiry Status - Invalid",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"WON\"\n}"
+            },
+            "url": "{{baseUrl}}/api/admin/inquiries/{{inquiryId}}"
+          }
+        }
+      ]
+    }
+  ]
+}
