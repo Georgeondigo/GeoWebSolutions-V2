@@ -19,20 +19,25 @@ export default function AdminLoginPage() {
     setError("");
     setIsLoading(true);
 
-    const result = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-      callbackUrl: "/admin",
-    });
+    try {
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+        callbackUrl: "/admin",
+      });
 
-    if (result?.error) {
-      setError("Invalid email or password.");
+      if (result?.error) {
+        setError("Invalid email or password.");
+        setIsLoading(false);
+        return;
+      }
+
+      router.push("/admin");
+    } catch {
+      setError("Unable to sign in right now. Please try again.");
       setIsLoading(false);
-      return;
     }
-
-    router.push("/admin");
   }
 
   return (
