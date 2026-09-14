@@ -14,7 +14,7 @@ const inter = localFont({
 });
 
 const agrandir = localFont({
-  src: "../fonts/Agrandir/Agrandir-rEGULAR.otf",
+  src: "../fonts/Agrandir/Agrandir-Regular.otf",
   variable: "--font-agrandir",
   weight: "400",
   style: "normal",
