@@ -28,10 +28,7 @@ export default async function AdminPage() {
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          <a
-            href="/admin/inquiries"
-            className="rounded-3xl bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
-          >
+          <div className="rounded-3xl bg-white p-6 shadow-sm">
             <p className="text-sm font-semibold text-geoweb-red">
               Inquiries
             </p>
@@ -44,7 +41,7 @@ export default async function AdminPage() {
               Review and manage project inquiries submitted through the
               GeoWeb website.
             </p>
-          </a>
+          </div>
 
           <div className="rounded-3xl bg-white p-6 shadow-sm">
             <p className="text-sm font-semibold text-geoweb-red">
