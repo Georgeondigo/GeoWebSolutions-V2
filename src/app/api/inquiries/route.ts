@@ -30,17 +30,17 @@ export async function POST(request: Request) {
     );
   }
 
-  try {
-    if (result.data.website) {
-      return Response.json(
-        {
-          success: false,
-          message: "Unable to process inquiry.",
-        },
-        { status: 400 },
-      );
-    }
+  if (result.data.website) {
+    return Response.json(
+      {
+        success: false,
+        message: "Unable to process inquiry.",
+      },
+      { status: 400 },
+    );
+  }
 
+  try {
     const inquiryData = { ...result.data };
     delete inquiryData.website;
 
@@ -96,15 +96,6 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Failed to create inquiry:", error);
 
-    if (result.data.website) {
-      return Response.json(
-        {
-          success: false,
-          message: "Unable to process inquiry.",
-        },
-        { status: 400 },
-      );
-    }
     return Response.json(
       {
         success: false,
