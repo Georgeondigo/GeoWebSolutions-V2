@@ -27,8 +27,12 @@ export async function sendInquiryNotification(inquiry: Inquiry) {
   });
 
   if (result.error) {
-    throw new Error("Inquiry notification delivery failed.");
-  }
+  console.error("Resend email error:", result.error);
+
+  throw new Error(
+    `Inquiry notification delivery failed: ${result.error.message}`,
+  );
+}
 
   return result;
 }
