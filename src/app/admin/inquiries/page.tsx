@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
 import { authOptions } from "@/lib/auth";
+import { NOTIFICATION_SUPPRESSED_ERROR } from "@/lib/email";
 import { prisma } from "@/lib/prisma";
 
 const projectTypeLabels: Record<string, string> = {
@@ -118,17 +119,22 @@ export default async function InquiriesPage() {
                       </td>
 
                       <td className="px-6 py-5 text-sm">
-                        <span
-                          className={
-                            inquiry.notificationStatus === "SENT"
-                              ? "text-emerald-700"
-                              : inquiry.notificationStatus === "FAILED"
-                                ? "text-red-700"
-                                : "text-geoweb-text/50"
-                          }
-                        >
-                          {inquiry.notificationStatus ?? "—"}
-                        </span>
+                        {inquiry.notificationError ===
+                        NOTIFICATION_SUPPRESSED_ERROR ? (
+                          <span className="text-amber-700">SUPPRESSED</span>
+                        ) : (
+                          <span
+                            className={
+                              inquiry.notificationStatus === "SENT"
+                                ? "text-emerald-700"
+                                : inquiry.notificationStatus === "FAILED"
+                                  ? "text-red-700"
+                                  : "text-geoweb-text/50"
+                            }
+                          >
+                            {inquiry.notificationStatus ?? "—"}
+                          </span>
+                        )}
                       </td>
 
                       <td className="whitespace-nowrap px-6 py-5 text-sm text-geoweb-text/60">

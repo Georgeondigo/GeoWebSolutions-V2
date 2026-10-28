@@ -3,6 +3,7 @@ import { redirect, notFound } from "next/navigation";
 import StatusControls from "./StatusControls";
 
 import { authOptions } from "@/lib/auth";
+import { NOTIFICATION_SUPPRESSED_ERROR } from "@/lib/email";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 
@@ -234,7 +235,9 @@ export default async function InquiryDetailPage({
               </p>
 
               <p className="text-sm font-semibold text-geoweb-indigo">
-                {inquiry.notificationStatus ?? "Not tracked"}
+                {inquiry.notificationError === NOTIFICATION_SUPPRESSED_ERROR
+                  ? "SUPPRESSED"
+                  : inquiry.notificationStatus ?? "Not tracked"}
               </p>
 
               {inquiry.notificationSentAt && (
@@ -247,10 +250,18 @@ export default async function InquiryDetailPage({
                 </p>
               )}
 
-              {inquiry.notificationError && (
-                <p className="mt-3 rounded-2xl bg-red-50 p-3 text-xs leading-5 text-red-700">
-                  {inquiry.notificationError}
+              {inquiry.notificationError === NOTIFICATION_SUPPRESSED_ERROR ? (
+                <p className="mt-3 rounded-2xl bg-amber-50 p-3 text-xs leading-5 text-amber-800">
+                  No email was sent for this inquiry because the hourly
+                  notification limit was reached. The inquiry was saved
+                  normally; follow it up from this dashboard.
                 </p>
+              ) : (
+                inquiry.notificationError && (
+                  <p className="mt-3 rounded-2xl bg-red-50 p-3 text-xs leading-5 text-red-700">
+                    {inquiry.notificationError}
+                  </p>
+                )
               )}
             </div>
 

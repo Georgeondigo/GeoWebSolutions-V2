@@ -1,6 +1,12 @@
 import { prisma } from "@/lib/prisma";
-import { sendInquiryNotification } from "@/lib/email";
+import {
+  NOTIFICATION_SUPPRESSED_ERROR,
+  sendInquiryNotification,
+} from "@/lib/email";
 import { inquirySchema } from "@/lib/validation";
+
+// shortcut: provisional cap; revisit once the Resend quota and real peak volume are known.
+const NOTIFICATION_HOURLY_CAP = 20;
 
 export async function POST(request: Request) {
   let body: unknown;
@@ -52,18 +58,45 @@ export async function POST(request: Request) {
     });
 
     try {
-      await sendInquiryNotification(inquiry);
-
-      await prisma.inquiry.update({
+      // Counted after our own insert, so concurrent requests always see each
+      // other's rows. Every non-suppressed inquiry is an attempt, including
+      // failed and in-flight ones; suppressed ones never use a slot.
+      const recentNotificationAttempts = await prisma.inquiry.count({
         where: {
-          id: inquiry.id,
-        },
-        data: {
-          notificationStatus: "SENT",
-          notificationSentAt: new Date(),
-          notificationError: null,
+          createdAt: {
+            gte: new Date(Date.now() - 60 * 60 * 1000),
+          },
+          OR: [
+            { notificationError: null },
+            { notificationError: { not: NOTIFICATION_SUPPRESSED_ERROR } },
+          ],
         },
       });
+
+      if (recentNotificationAttempts > NOTIFICATION_HOURLY_CAP) {
+        await prisma.inquiry.update({
+          where: {
+            id: inquiry.id,
+          },
+          data: {
+            notificationStatus: "FAILED",
+            notificationError: NOTIFICATION_SUPPRESSED_ERROR,
+          },
+        });
+      } else {
+        await sendInquiryNotification(inquiry);
+
+        await prisma.inquiry.update({
+          where: {
+            id: inquiry.id,
+          },
+          data: {
+            notificationStatus: "SENT",
+            notificationSentAt: new Date(),
+            notificationError: null,
+          },
+        });
+      }
     } catch (error) {
       console.error("Failed to send inquiry notification:", error);
 

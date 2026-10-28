@@ -2,6 +2,10 @@ import { Resend } from "resend";
 import type { Inquiry } from "@/generated/prisma/client";
 import { buildInquiryEmail } from "./templates/inquiry";
 
+// Stored in notificationError with status FAILED; marks a deliberately skipped notification.
+export const NOTIFICATION_SUPPRESSED_ERROR =
+  "Notification suppressed: hourly notification limit reached.";
+
 export async function sendInquiryNotification(inquiry: Inquiry) {
   const apiKey = process.env.RESEND_API_KEY;
   const notificationEmail = process.env.INQUIRY_NOTIFICATION_EMAIL;
