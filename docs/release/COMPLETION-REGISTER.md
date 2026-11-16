@@ -26,7 +26,7 @@ Effort is hands-on implementation time.
 
 ## Critical path
 
-1. Resolve the uncommitted package changes (E3), merge CI (E2), protect `develop` (E4).
+1. Resolve the uncommitted package changes (E3), merge the release procedure, protect `develop` (E4).
 2. Privacy notice (W8).
 3. Admin sign-out, login throttling, security headers, inquiry rate limit (A2, A3, A5, I2).
 4. SEO basics (W7).
@@ -82,7 +82,7 @@ Hosting-plan terms (O4) need a decision in parallel; it may affect the KES 0 bud
 | D1 | Schema and migration history | COMPLETE | One `Inquiry` model, two enums, three ordered migrations | — | — | — | — |
 | D2 | Production migration procedure | BROKEN | Config is named `prisma7.config.ts` (Prisma looks for `prisma.config.ts`) and imports `dotenv`, which is not installed. `prisma migrate deploy` has not been run in this audit | Rename or pass `--config`, drop or add `dotenv`, then prove `prisma migrate status` against a throwaway database. Blocks every future schema change | P1 | Approval before touching a real database | 1–2h |
 | D3 | Backup and recovery | MISSING | No backup procedure documented; database provider and plan not inspected | Record the provider's backup or point-in-time recovery; add a manual `pg_dump` step if there is none | P1 | Provider dashboard | 1h |
-| D4 | Preview and Production share a database | PARTIAL | Stated by the owner; consistent with one `DATABASE_URL` in code | Either accept and follow the Preview rule in RELEASE.md, or point Preview at a second free database | P2 | Owner decision | 1h |
+| D4 | Preview and Production share a database | PARTIAL | Stated by the owner; consistent with one `DATABASE_URL` in code | Previews require Vercel sign-in (verified on PR 1), so the public cannot reach the database through them. Either accept and follow the Preview rule in RELEASE.md, or point Preview at a second free database | P2 | Owner decision | 1h |
 | D5 | Test data in production | PARTIAL | Docs record test inquiries submitted to production | Archive or delete test rows (deletion needs approval) | P2 | Approval | 0.5h |
 
 ### Engineering, CI and release
@@ -90,13 +90,14 @@ Hosting-plan terms (O4) need a decision in parallel; it may affect the KES 0 bud
 | ID | Requirement | Status | Evidence | Remaining work | Pri | Depends on | Effort |
 |---|---|---|---|---|---|---|---|
 | E1 | Lint, TypeScript, production build | COMPLETE | All pass on a clean checkout (see "How things were verified") | — | — | — | — |
-| E2 | Continuous integration | PARTIAL | `.github/workflows/ci.yml` on branch `ci/release-safety`; the same commands pass locally. Not yet run on GitHub | Push the branch, open a PR, confirm the first run is green | P0 | Push approval | 0.5h |
+| E2 | Automated pre-merge check | PARTIAL | GitHub Actions is unavailable: the job on PR 1 was not started because the account is locked for a billing issue, and the owner cannot clear it. The Vercel Preview build (TypeScript check and production build) runs on every pull request and passed on PR 1. Lint is not enforced anywhere | Decide whether to add lint to the build script so Vercel enforces it (changes the production build command; needs approval). Restore the Actions workflow from history if the lock is cleared | P1 | Owner decision | 10 min |
 | E3 | Uncommitted changes to `package.json`, `pnpm-lock.yaml`, `pnpm-workspace.yaml` | BROKEN | Adds `@prisma/cli 8.0.0-rc.28` (a pre-release, about 3,300 new lockfile lines, used by no script or source file) and leaves `set this to true or false` placeholders for `esbuild` and `workerd` in `allowBuilds`. Files dated 29 Oct, the day after the last commit | Recommendation: discard all three (`git restore`). Must not be committed as they are. Left untouched pending the owner's decision | P0 | Owner decision | 5 min |
-| E4 | Branch protection on `develop` | MISSING | GitHub API returns "Branch not protected" | Apply the settings in RELEASE.md once E2 is green | P0 | E2, approval | 10 min |
+| E4 | Branch protection on `develop` | MISSING | GitHub API returns "Branch not protected" | Apply the settings in RELEASE.md, requiring the `Vercel` status. Not tested whether the billing lock blocks this setting | P0 | Approval | 10 min |
 | E5 | Release procedure and production-branch documentation | COMPLETE | `docs/04-deployment/RELEASE.md`; README, DEPLOYMENT.md and DEVELOPMENT-WORKFLOW.md corrected to say `develop` is production | — | — | — | — |
 | E6 | Clean working tree | PARTIAL | Besides E3, four untracked items: `CLAUDE.md`, two `docs/02-architecture/` files, `docs/09-engineering-hardening/` | Owner decides whether to commit them | P1 | Owner decision | 10 min |
 | E7 | Automated tests | MISSING | No test runner; one Postman collection | Smallest useful set: unit tests for `inquirySchema` and `allowedTransitions` using Node's built-in test runner | P2 | — | 2h |
-| E8 | Node version alignment | PARTIAL | CI uses Node 24; local machine runs 26; Vercel's setting not inspected; no `engines` field | Read the Vercel project's Node version and make CI match | P2 | Vercel dashboard | 10 min |
+| E8 | Node version alignment | PARTIAL | Local machine runs Node 26; Vercel's setting not inspected; no `engines` field | Read the Vercel project's Node version and develop on the same major | P2 | Vercel dashboard | 10 min |
+| E9 | GitHub account billing lock | BROKEN | GitHub annotation on PR 1: "your account is locked due to a billing issue" | Owner reports it cannot be cleared at present. Effects beyond Actions are unknown | P1 | Owner | — |
 
 ### Observability and operations
 
@@ -124,5 +125,5 @@ Hosting-plan terms (O4) need a decision in parallel; it may affect the KES 0 bud
 
 ## Totals
 
-P0: E2, E3, E4, W8, R1 — about half a day.
+P0: E3, E4, W8, R1 — about half a day.
 P1: about two days of implementation plus owner decisions and dashboard checks.

@@ -16,17 +16,26 @@ link here instead of restating it.
 - The build (`prisma generate && next build`) never applies migrations.
 - `develop` has no branch protection.
 
-## What CI does and does not do
+## The release gate
 
-`.github/workflows/ci.yml` runs on every pull request and on pushes to
-`develop`: frozen-lockfile install, `pnpm lint`, `pnpm build` (which includes
-the TypeScript check). It uses a dummy `DATABASE_URL` and no secrets.
+GitHub Actions is not available: on 16 November 2026 GitHub refused to start a
+job because the account is locked for a billing issue. A workflow was written
+and removed again (see commit history of `.github/workflows/ci.yml`); restore it
+if the lock is ever cleared.
 
-**CI does not stop Vercel.** Vercel starts its own build the moment a commit
-lands on `develop`, in parallel with CI. A direct push that fails CI still
-deploys if Vercel's own build succeeds. CI only gates Production when changes
-reach `develop` through a pull request that must pass CI first; see
-"Branch protection" below.
+The gate is therefore Vercel's own build, which costs nothing:
+
+- Every pull request gets a Preview build that runs
+  `prisma generate && next build`, including the TypeScript check. Its result
+  is reported on the pull request as the `Vercel` status.
+- A failed build on `develop` is not promoted; the previous Production
+  deployment keeps serving.
+- **Lint is not part of the Vercel build.** `pnpm lint` must be run locally
+  before pushing. Nothing enforces it.
+- Preview deployments require Vercel sign-in, so they are not public.
+
+A direct push to `develop` skips the Preview check and goes straight to a
+Production build. See "Branch protection" below.
 
 ## Releasing a change
 
@@ -36,7 +45,7 @@ reach `develop` through a pull request that must pass CI first; see
    - This creates a Vercel Preview that uses the production database. Do not
      submit test inquiries or change inquiry statuses on a Preview unless the
      resulting records are acceptable in production data.
-4. Wait for the `Lint and build` check to pass. Review the diff.
+4. Wait for the `Vercel` status to pass. Review the diff.
 5. If the change includes a migration, complete "Database migrations" below
    before merging.
 6. Merge the pull request. Vercel deploys `develop` to Production.
@@ -69,13 +78,15 @@ every schema change as a manual, explicitly approved step:
 
 ## Branch protection (proposed, not applied)
 
-To make CI an actual gate, protect `develop` in GitHub repository settings:
+To make the Preview build an actual gate, protect `develop` in GitHub
+repository settings:
 
 - Require a pull request before merging.
-- Require the `Lint and build` status check to pass.
+- Require the `Vercel` status check to pass.
 - Do not allow bypassing for administrators.
 
-The repository is public, so this is available on the free plan. With a single
-maintainer, leave "required approvals" at 0; the value is the required check,
-not the review. Applying this is a repository settings change and needs explicit
-approval.
+The repository is public, so this is normally available on the free plan;
+whether the billing lock also blocks this setting has not been tested. With a
+single maintainer, leave "required approvals" at 0; the value is the required
+check, not the review. Applying this is a repository settings change and needs
+explicit approval.

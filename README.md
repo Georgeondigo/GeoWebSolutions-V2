@@ -454,7 +454,7 @@ Generated Prisma client files are not manually maintained.
 `develop` is the production branch: it is the GitHub default branch and Vercel
 deploys every push to it to Production. There is no `main` branch on GitHub.
 
-Changes reach `develop` through a pull request that passes CI. The full
+Changes reach `develop` through a pull request whose Vercel Preview build passes. The full
 procedure, including rollback and migrations, is in
 [docs/04-deployment/RELEASE.md](docs/04-deployment/RELEASE.md).
 

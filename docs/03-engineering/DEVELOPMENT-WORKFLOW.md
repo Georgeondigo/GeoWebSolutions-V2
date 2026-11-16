@@ -13,7 +13,7 @@ Review diff
   ↓
 Commit
   ↓
-Pull request into develop (CI must pass)
+Pull request into develop (Vercel Preview build must pass)
   ↓
 Merge
   ↓
