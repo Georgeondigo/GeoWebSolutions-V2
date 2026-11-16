@@ -13,14 +13,19 @@ Review diff
   ↓
 Commit
   ↓
-Push develop
+Pull request into develop (CI must pass)
   ↓
-Vercel deployment
+Merge
+  ↓
+Vercel production deployment
   ↓
 Production verification
   ↓
 Document outcome
 ```
+
+The step-by-step release procedure is in
+[../04-deployment/RELEASE.md](../04-deployment/RELEASE.md).
 
 ## Useful Commands
 

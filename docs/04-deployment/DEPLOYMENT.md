@@ -12,7 +12,9 @@ geoweb-solutions-v2
 
 ## Production Branch
 
-The documented deployment is associated with the `develop` branch.
+`develop`. Every push to it is deployed to Production by Vercel.
+
+The release procedure is in [RELEASE.md](RELEASE.md).
 
 ## Deployment Requirement
 

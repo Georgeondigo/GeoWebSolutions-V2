@@ -451,42 +451,12 @@ Generated Prisma client files are not manually maintained.
 
 # 14. Git Workflow
 
-The repository uses separate branches for stable and active development.
+`develop` is the production branch: it is the GitHub default branch and Vercel
+deploys every push to it to Production. There is no `main` branch on GitHub.
 
-Current branches:
-
-```text
-main
-develop
-```
-
-General workflow:
-
-```text
-develop
-   │
-   ├── Development
-   ├── Testing
-   ├── Verification
-   │
-   ▼
-main
-   │
-   ▼
-Production
-```
-
-The `develop` branch is the active development branch.
-
-Changes should be committed with meaningful messages.
-
-Example:
-
-```bash
-git add .
-git commit -m "Describe the change"
-git push origin develop
-```
+Changes reach `develop` through a pull request that passes CI. The full
+procedure, including rollback and migrations, is in
+[docs/04-deployment/RELEASE.md](docs/04-deployment/RELEASE.md).
 
 ---
 
